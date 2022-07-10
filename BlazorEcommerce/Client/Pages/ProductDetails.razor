@@ -1,0 +1,34 @@
+﻿@page "/product/{id:int}"
+@inject IProductService ProductService
+
+@if (_product == null)
+{
+    <span>Loading Product</span>
+}
+else
+{
+    <div class="media">
+        <div class="media-img-warpper me-2">
+            <img src="@_product.ImageUrl" alt="" class="media-img" />
+        </div>
+        <div class="media-body">
+            <h2 class="mb-0">@_product.Title</h2>
+            <p>@_product.Description</p>
+            <h4 class="price">$@_product.Price</h4>
+        </div>
+    </div>
+}
+
+@code {
+    private Product? _product = null;
+
+    [Parameter]
+    public int Id { get; set; }
+
+    protected override Task OnParametersSetAsync()
+    {
+        _product = ProductService.Products.Find(p => p.Id == Id);
+        return base.OnParametersSetAsync();
+    }
+
+}
