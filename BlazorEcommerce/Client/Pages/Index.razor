@@ -1,20 +1,31 @@
 ﻿@page "/"
 @page "/{categoryurl}"
-@using BlazorEcommerce.Client.Services.ProductService
-@inject IProductService _productService
+@inject IProductApi ProductApi
+
 
 <PageTitle>My Shop</PageTitle>
 
-<ProductList />
+<ProductList Products="Products" />
 
 @code
 {
-    [Parameter]
-    public string? CategoryUrl { get; set; }
+    private List<Product>? Products { get; set; } = new();
 
+    [Parameter]
+    public string? CategoryUrl { get; set; } = null;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await ProductApi.GetProducts();
+        Products = result.Data;
+    }
     protected override async Task OnParametersSetAsync()
     {
-        await _productService.GetProducts(CategoryUrl);
-        await base.OnParametersSetAsync();
+        if (CategoryUrl != null)
+        {
+            var result = await ProductApi.GetProductsByCategory(CategoryUrl);
+            Products = result.Data;
+        }
     }
 }

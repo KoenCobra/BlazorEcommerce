@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -12,6 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\BlazorECommerce.Sdk\BlazorECommerce.Sdk.csproj" />
+    <ProjectReference Include="..\..\BlazorEcommerce.Services\BlazorEcommerce.Services.csproj" />
     <ProjectReference Include="..\Shared\BlazorEcommerce.Shared.csproj" />
   </ItemGroup>
 

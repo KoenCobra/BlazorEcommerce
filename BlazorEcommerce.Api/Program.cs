@@ -1,15 +1,25 @@
-global using BlazorEcommerce.Shared;
 using BlazorECommerce.Data;
 using BlazorEcommerce.Services;
 using BlazorEcommerce.Services.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
+var MyAllowAllOrigins = "_myAllowAllmyOrigins";
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowAllOrigins,
+        builder =>
+        {
+            builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+        });
+});
 
 // Add services to the container.
 
-builder.Services.AddControllersWithViews();
-builder.Services.AddRazorPages();
+builder.Services.AddControllers();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -21,32 +31,19 @@ builder.Services.AddDbContext<DataContext>(options =>
 
 var app = builder.Build();
 
-app.UseSwaggerUI();
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseWebAssemblyDebugging();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
-else
-{
-    app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
-
-app.UseSwagger();
 
 app.UseHttpsRedirection();
-
-app.UseBlazorFrameworkFiles();
-app.UseStaticFiles();
-
-app.UseRouting();
+app.UseCors(MyAllowAllOrigins);
 
 
-app.MapRazorPages();
+app.UseAuthorization();
+
 app.MapControllers();
-app.MapFallbackToFile("index.html");
 
 app.Run();

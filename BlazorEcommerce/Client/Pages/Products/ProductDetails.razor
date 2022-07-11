@@ -1,0 +1,42 @@
+﻿@page "/product/{id:int}"
+@inject IProductApi _productApi
+
+@if (_product == null)
+{
+    <span>@_message</span>
+}
+else
+{
+    <div class="media">
+        <div class="media-img-warpper me-2">
+            <img src="@_product.ImageUrl" alt="" class="media-img" />
+        </div>
+        <div class="media-body">
+            <h2 class="mb-0">@_product.Title</h2>
+            <p>@_product.Description</p>
+            <h4 class="price">$@_product.Price</h4>
+        </div>
+    </div>
+}
+
+@code {
+    private Product? _product;
+    private string? _message;
+
+    [Parameter]
+    public int Id { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _message = "Loading Products";
+        var result = await _productApi.GetProduct(Id);
+
+        if (!result.Succes)
+        {
+            _message = result.Message;
+        }
+        _product = result.Data;
+        await base.OnParametersSetAsync();
+    }
+
+}
