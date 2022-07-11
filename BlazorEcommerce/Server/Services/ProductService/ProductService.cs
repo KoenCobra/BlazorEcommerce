@@ -12,7 +12,7 @@ namespace BlazorEcommerce.Server.Services.ProductService
             _dataContext = dataContext;
         }
 
-        public async Task<ServiceResponse<List<Product>>> GetProductAsync()
+        public async Task<ServiceResponse<List<Product>>> GetProductsAsync()
         {
             var response = new ServiceResponse<List<Product>>
             {
@@ -22,9 +22,22 @@ namespace BlazorEcommerce.Server.Services.ProductService
             return response;
         }
 
-        public Task<Product> GetProductAsync(string productId)
+        public async Task<ServiceResponse<Product>> GetProductAsync(int productId)
         {
-            throw new NotImplementedException();
+            var response = new ServiceResponse<Product>();
+            var product = await _dataContext.Products.FindAsync(productId);
+
+            if (product == null)
+            {
+                response.Succes = false;
+                response.Message = "Sorry, this product does not exist";
+            }
+            else
+            {
+                response.Data = product;
+            }
+
+            return response;
         }
     }
 }
