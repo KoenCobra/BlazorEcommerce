@@ -1,5 +1,20 @@
 ﻿@page "/"
+@page "/{categoryurl}"
+@using BlazorEcommerce.Client.Services.ProductService
+@inject IProductService _productService
 
 <PageTitle>My Shop</PageTitle>
 
-<ProductList/>
+<ProductList />
+
+@code
+{
+    [Parameter]
+    public string? CategoryUrl { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await _productService.GetProducts(CategoryUrl);
+        await base.OnParametersSetAsync();
+    }
+}

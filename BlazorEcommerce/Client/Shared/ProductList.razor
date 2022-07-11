@@ -1,4 +1,5 @@
-﻿@inject IProductService _productService
+﻿@using BlazorEcommerce.Client.Services.ProductService
+@inject IProductService _productService
 
 @if (_productService.Products == null || _productService.Products.Count == 0)
 {
@@ -29,9 +30,13 @@ else
     </ul>
 }
 @code {
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        await _productService.GetProducts();
-        await base.OnInitializedAsync();
+        _productService.ProductsChanged += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        _productService.ProductsChanged -= StateHasChanged;
     }
 }

@@ -1,4 +1,5 @@
 ﻿@page "/product/{id:int}"
+@using BlazorEcommerce.Client.Services.ProductService
 @inject IProductService ProductService
 
 @if (_product == null)
