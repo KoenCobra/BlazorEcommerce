@@ -2,7 +2,6 @@
 @page "/{categoryurl}"
 @inject IProductApi ProductApi
 
-
 <PageTitle>My Shop</PageTitle>
 
 <ProductList Products="Products" />
@@ -12,8 +11,7 @@
     private List<Product>? Products { get; set; } = new();
 
     [Parameter]
-    public string? CategoryUrl { get; set; } = null;
-
+    public string? CategoryUrl { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
